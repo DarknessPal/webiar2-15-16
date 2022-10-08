@@ -18,51 +18,45 @@ public class Dispatcher {
                 firstGroup.getStudent(studentIndex).setMark(markIndex, random.nextInt(12));
             }
         }
-        Group finalFirstGroup = firstGroup;
         isStudyYearEnds = true;
+        Group finalFirstGroup = null;
         if (isStudyYearEnds) {
             finalFirstGroup = StudyController.endsStudyYear(firstGroup);
             firstGroup = null;
         }
+        System.out.println(finalFirstGroup.students);
     }
     static class Group {
         Random random = new Random();
         int groupSize;
-        ArrayList<Student> students;
-
+        List<Student> students;
         Group() {
             this.groupSize = random.nextInt(30);
             this.students = new ArrayList<>();
         }
-
         public Student getStudent(int studentIndex) {
             return students.get(studentIndex);
         }
     }
-
     static class Student {
         String name;
         ArrayList<Integer> marks;
-
         Student(Faker faker) {
             this.name = faker.name().fullName();
             this.marks = new ArrayList<>();
         }
-
         @Override
         public String toString() {
             return name;
         }
-
         public void setMark(int markIndex, int mark) {
             this.marks.add(markIndex, mark);
         }
     }
-
-    class StudyController {
+    static class StudyController {
         public static Group endsStudyYear(Group g) {
             final Group firstGroup = g;
-            firstGroup.students = (ArrayList<Student>) Collections.unmodifiableList(firstGroup.students);
+            firstGroup.students = Collections.unmodifiableList(firstGroup.students);
             return firstGroup;
         }
     }
