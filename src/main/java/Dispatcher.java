@@ -12,19 +12,13 @@ public class Dispatcher {
         for (int i = 0; i < firstGroup.groupSize; i++){
             firstGroup.students.add(new Student(faker));
         }
- /*       for (int i = 0; i < firstGroup.groupSize; i++) {
-            System.out.println(firstGroup.students.get(i));
-        }*/
         for (int studentIndex = 0; studentIndex < firstGroup.groupSize; studentIndex++){
-            String temp = String.valueOf(firstGroup.students.get(studentIndex));
-            System.out.println(temp);
             int marksCount = random.nextInt(12);
             for (int markIndex = 0; markIndex < marksCount; markIndex++) {
             firstGroup.getStudent(studentIndex).setMark(markIndex, random.nextInt(12));
-//                System.out.println(firstGroup.getStudent(studentIndex));
             }
         }
-//        List<Student> firstGroupStudents = (List<Student>) Collections.unmodifiableList(firstGroup.students);
+        List<Student> firstGroupStudents = Collections.unmodifiableList(firstGroup.students);
     }
      static class Group {
         Random random = new Random();
@@ -34,7 +28,7 @@ public class Dispatcher {
             this.groupSize = random.nextInt( 30);
             this.students = new ArrayList<> ();
         }
-        public Object getStudent(int studentIndex) {
+        public Student getStudent(int studentIndex) {
             return students.get(studentIndex);
         }
     }
@@ -50,7 +44,7 @@ public class Dispatcher {
         public String toString(){
             return name;
         }
-        void setMark (int markIndex, int mark) {
+        public void setMark (int markIndex, int mark) {
             this.marks.add(markIndex, mark);
         }
     }
