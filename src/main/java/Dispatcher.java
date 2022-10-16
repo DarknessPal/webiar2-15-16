@@ -12,19 +12,38 @@ public class Dispatcher {
         for (int i = 0; i < firstGroup.groupSize; i++) {
             firstGroup.students.add(new Student(faker));
         }
+        System.out.println("Students' list");
+        System.out.println(firstGroup.students);
+ //       System.out.println("Marks");
         for (int studentIndex = 0; studentIndex < firstGroup.groupSize; studentIndex++) {
             int marksCount = random.nextInt(12);
+ //           System.out.println(firstGroup.getStudent(studentIndex));
             for (int markIndex = 0; markIndex < marksCount; markIndex++) {
                 firstGroup.getStudent(studentIndex).setMark(markIndex, random.nextInt(12));
             }
+ //           System.out.println(firstGroup.getStudent(studentIndex).marks);
         }
         isStudyYearEnds = true;
         Group finalFirstGroup = null;
         if (isStudyYearEnds) {
             finalFirstGroup = StudyController.endsStudyYear(firstGroup);
+            for (int studentIndex = 0; studentIndex < firstGroup.groupSize; studentIndex++) {
+                finalFirstGroup.getStudent(studentIndex).closeMark();
+                finalFirstGroup.getStudent(studentIndex).closeName(finalFirstGroup.getStudent(studentIndex).name);
+            }
             firstGroup = null;
         }
+        ///////////// Break Test ///////////////////
+        Student temp1 = finalFirstGroup.students.get(0);
+        temp1.name = "You failed";
+ //       temp1.marks = finalFirstGroup.students.setMark(1, 1);
+        System.out.println("Closed group students' list");
         System.out.println(finalFirstGroup.students);
+
+        //////// Set a new mark ////////
+//        finalFirstGroup.getStudent(0).setMark(0, 0);
+//        System.out.println(finalFirstGroup.getStudent(0).marks);
+        ///////////// End of Break Test /////////////////
     }
     static class Group {
         Random random = new Random();
@@ -40,7 +59,7 @@ public class Dispatcher {
     }
     static class Student {
         String name;
-        ArrayList<Integer> marks;
+        List<Integer> marks;
         Student(Faker faker) {
             this.name = faker.name().fullName();
             this.marks = new ArrayList<>();
@@ -51,6 +70,12 @@ public class Dispatcher {
         }
         public void setMark(int markIndex, int mark) {
             this.marks.add(markIndex, mark);
+        }
+        public void closeMark() {
+            this.marks = Collections.unmodifiableList(marks);
+        }
+        public void closeName(final String name) {
+            this.name = name;
         }
     }
     static class StudyController {
