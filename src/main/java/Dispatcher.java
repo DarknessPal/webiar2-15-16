@@ -28,10 +28,10 @@ public class Dispatcher {
         if (isStudyYearEnds) {
             finalFirstGroup = StudyController.endsStudyYear(firstGroup);
             for (int studentIndex = 0; studentIndex < firstGroup.groupSize; studentIndex++) {
+                finalFirstGroup.getStudent(studentIndex).isFinished = true;
                 finalFirstGroup.getStudent(studentIndex).closeMark();
-                finalFirstGroup.getStudent(studentIndex).closeName(finalFirstGroup.getStudent(studentIndex).name);
+                finalFirstGroup.getStudent(studentIndex).init();
             }
-            firstGroup = null;
         }
         ///////////// Break Test ///////////////////
         Student temp1 = finalFirstGroup.students.get(0);
@@ -58,11 +58,28 @@ public class Dispatcher {
         }
     }
     static class Student {
-        String name;
+        private String name;
+        private final String finalName = init();;
+        boolean isFinished = false;
         List<Integer> marks;
         Student(Faker faker) {
             this.name = faker.name().fullName();
             this.marks = new ArrayList<>();
+        }
+        String init() {
+            System.out.println(this.name);
+            return this.name;
+        }
+        public String getName(){
+            return name;
+        }
+        public void setName(String name){
+            if (!isFinished) {
+                this.name = name;
+            } else{
+                this.name = null;
+                System.out.println("Can't set name in final group");
+            }
         }
         @Override
         public String toString() {
@@ -73,9 +90,6 @@ public class Dispatcher {
         }
         public void closeMark() {
             this.marks = Collections.unmodifiableList(marks);
-        }
-        public void closeName(final String name) {
-            this.name = name;
         }
     }
     static class StudyController {
